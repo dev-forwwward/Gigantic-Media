@@ -1,0 +1,160 @@
+/* specific elements styles import */
+@import url('navbar.css');
+@import url('menu.css');
+@import url('form.css');
+@import url('homepage-circle.css');
+@import url('orbit-rotation.css');
+@import url('services-diagram.css');
+@import url('blog-filter.css');
+@import url('button.css');
+
+/* styles per page */
+@import url('contacts-page.css');
+@import url('cases-page.css');
+
+.overflow-hidden {
+    overflow: hidden !important;
+    /* touch-action: none; Prevents touch scrolling */
+    overscroll-behavior: none; /* Prevents scroll chaining */
+}
+
+body {
+    overflow-x: clip;
+}
+
+body.dark {
+    background-color: var(--_gigantic-theme---secondary-bg-color);
+}
+
+.hero_title.mix_blend {
+    mix-blend-mode: exclusion;
+    color: var(--_gigantic-theme---primary-bg-color);
+}
+
+body.red {
+    background-color: var(--_gigantic-theme---tertiary-bg-color);
+}
+
+/*
+*   Border Element
+*/
+.page_border_container.secondary {
+    --_gigantic-theme---dropshadow-color: var(--_gigantic-theme---dark-color);
+}
+
+.page_border_container.secondary .page_border_el {
+    transition: border-color .25s ease;
+}
+
+.page_border_container.secondary .page_border_el {
+    border-color: var(--_gigantic-theme---dark-color);
+}
+
+/* Prevent sub-pixel rendering issues */
+.circle-section {
+    transform-origin: center center;
+}
+
+
+
+/*
+*   Legal Pages
+*/
+
+.legal_text_content {
+    font-size: 1.125rem;
+}
+
+.legal_text_content p,
+.legal_text_content ul,
+.legal_text_content li {
+    color: var(--_gigantic-theme---text-secondary-light)
+}
+
+.legal_text_content h2 {
+    font-size: 2rem;
+}
+
+.legal_text_content h3 {
+    font-size: 1.5rem;
+}
+
+.legal_text_content h4 {
+    font-size: 1.25rem;
+}
+
+.legal_text_content h5 {
+    font-size: 1rem;
+}
+
+@media screen and (max-width: 767px) {
+    .legal_text_content {
+        font-size: 1rem;
+    }
+
+    .legal_text_content h2 {
+        font-size: 1.25rem;
+    }
+
+    .legal_text_content h3 {
+        font-size: 1.125rem;
+    }
+
+    .legal_text_content h4,
+    .legal_text_content h5 {
+        font-size: 1rem;
+    }
+}
+
+
+/* div[connect-box="0"] .slice-line-divider-inner {
+    background-color: #00ff5a;
+    height: 5px;
+}
+
+div[connect-box="1"] .slice-line-divider-inner {
+    background-color: blue;
+    height: 5px;
+}
+
+div[connect-box="2"] .slice-line-divider-inner {
+    background-color: #c000ff;
+    height: 5px;
+}
+
+div[connect-box="3"] .slice-line-divider-inner {
+    background-color: #ff8000;
+    height: 5px;
+}
+
+div[connect-box="4"] .slice-line-divider-inner {
+    background-color: rgb(0, 195, 255);
+    height: 5px;
+}
+
+div[connect-box="5"] .slice-line-divider-inner {
+    background-color: #4400ff;
+    height: 5px;
+} */
+
+.rect_mask {
+    transform: rotate(67.5deg);
+}
+
+@media screen and (min-width: 992px) {
+    .line_box_container {
+        left: -100%;
+    }
+
+    .circle-section,
+    .circle-list-container,
+    .line_box_container {
+        will-change: transform;
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+    }
+
+    .slice-line-divide {
+        will-change: transform;
+    }
+}

@@ -1,0 +1,18 @@
+body:not(.homepage_body) .navbar_component {
+    background-color: var(--_gigantic-theme---light-color);
+}
+
+body.dark-nav:not(.homepage_body) .navbar_component {
+    background-color: var(--_gigantic-theme---secondary-bg-color);
+}
+
+body.red:not(.homepage_body) .navbar_component {
+    background-color: var(--_gigantic-theme---tertiary-bg-color);
+}
+
+body.nav-logo-light .hero_title {
+    .nav_title_heading svg,
+    .hero_title_heading svg {
+        color: var(--base-color-neutral--white);
+    }
+}

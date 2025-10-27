@@ -1,0 +1,4 @@
+/* Rolling text */
+.button:hover .btn-strip {
+    transform: translateY(calc(-1em));
+}

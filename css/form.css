@@ -1,0 +1,112 @@
+/* From Submit Button States */
+/* this is a style exception for when the contact section bg is red (and the button turns to white) */
+body.dark .s_cfo_form_btn:hover,
+.section_contact_form.active .s_cfo_form_btn:hover {
+    background-color: #E8DADC;
+}
+
+/* Validation errors */
+form .error {
+    margin-bottom: .625rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    width: 100%;
+    /* position: relative; */
+    /* top: calc(100% + .25rem); */
+    opacity: 0;
+    line-height: 120%;
+    visibility: hidden;
+    /* transition: opacity 0.3s ease 0.3s, visibility 0s linear 0.3s; */
+    color: var(--_gigantic-theme---alert--fire-red);
+}
+
+.contact_section.active form .error {
+    color: var(--_gigantic-theme---light-color);
+}
+
+.contact_section.active .s_cfo_form_r_input {
+    color: var(--_gigantic-theme---text-color-secondary);
+}
+
+body.homepage_body .contact_section form .error {
+    color: var(--_gigantic-theme---light-color) !important;
+}
+
+.contact_section.active .ty_success_msg,
+.homepage_body .ty_success_msg {
+    color: var(--_gigantic-theme---light-color);
+}
+
+.contact_section.active .success_check_container,
+.homepage_body .success_check_container {
+    background-color: var(--_gigantic-theme---light-color);
+    color: var(--_gigantic-theme---secondary-color);
+}
+
+
+/* form label.error.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s linear 0s;
+} */
+
+div.error {
+    visibility: hidden;
+}
+
+div.error.show {
+    visibility: visible;
+    position: relative;
+    opacity: 1;
+}
+
+@media screen and (max-width: 480px) {
+    .email-example {
+        display: none;
+    }
+}
+
+/* Hide native checkbox */
+.s_cfo_form_row_checkbox {
+    flex-wrap: wrap;
+}
+
+.s_cfo_form_row_checkbox input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  font: inherit;
+  color: #1E1E1E;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--base-color-neutral--neutral-darkest);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.s_cfo_form_row_checkbox input[type="checkbox"].active {
+    border-color: #E85B54;
+    background-color: #E85B54;
+}
+
+.s_cfo_form_row_checkbox input[type="checkbox"]::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  /* background-color: var(--base-color-neutral--neutral-darkest); */
+  background-color: #F0E7E9;
+}
+
+.s_cfo_form_row_checkbox input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}

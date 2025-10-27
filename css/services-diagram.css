@@ -1,0 +1,32 @@
+@media screen and (min-width:992px) {
+    .service_content {
+        opacity: 0;
+    }
+
+    .service_content.active {
+        opacity: 1;
+    }
+
+    .service_content.neighbor_service {
+        opacity: .25;
+    }
+}
+
+.diagram_central_circle_marker {
+    height: 9.125rem;
+    /* top: 0; */
+    /* transform-origin: unset; */
+}
+
+.diagram_central_circle_marker_inner { 
+    margin: auto;
+    top: 0;
+    bottom: 0;
+}
+
+.diagram_rotating_line {
+    transform-origin: 0% 50% !important;
+    position: absolute;
+    left: 50%; /* Position the line's start point at the center */
+    top: 50%;
+}
