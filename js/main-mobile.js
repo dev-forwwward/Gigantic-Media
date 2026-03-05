@@ -8,21 +8,6 @@ if (document.readyState === 'complete') {
     window.addEventListener('load', init); // wait for it
 }
 
-// ScrollTrigger.normalizeScroll({
-//     allowNestedScroll: true,
-//     type: "touch,wheel,pointer",
-//     fastScrollEnd: true,  // Helps with momentum scrolling on mobile
-//     autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
-// });
-
-window.addEventListener('pageshow', function (event) {
-    gsap.set('.preloader', { visibility: 'visible' });
-    gsap.to('.preloader', {
-        opacity: 1,
-        duration: .1,
-    });
-});
-
 function init() {
     if (window.innerWidth <= mobileBreakpoint && document.querySelector('.circle-section')) {
 

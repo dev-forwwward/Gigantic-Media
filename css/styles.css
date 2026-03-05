@@ -106,37 +106,6 @@ body.red {
     }
 }
 
-
-/* div[connect-box="0"] .slice-line-divider-inner {
-    background-color: #00ff5a;
-    height: 5px;
-}
-
-div[connect-box="1"] .slice-line-divider-inner {
-    background-color: blue;
-    height: 5px;
-}
-
-div[connect-box="2"] .slice-line-divider-inner {
-    background-color: #c000ff;
-    height: 5px;
-}
-
-div[connect-box="3"] .slice-line-divider-inner {
-    background-color: #ff8000;
-    height: 5px;
-}
-
-div[connect-box="4"] .slice-line-divider-inner {
-    background-color: rgb(0, 195, 255);
-    height: 5px;
-}
-
-div[connect-box="5"] .slice-line-divider-inner {
-    background-color: #4400ff;
-    height: 5px;
-} */
-
 .rect_mask {
     transform: rotate(67.5deg);
 }
@@ -157,4 +126,19 @@ div[connect-box="5"] .slice-line-divider-inner {
     .slice-line-divide {
         will-change: transform;
     }
+}
+
+
+
+/*
+*   Preloader Element
+*/
+
+.preloader {
+    animation: forceHide 0s 3s forwards; /* hide after 3s no matter what */
+    pointer-events: none !important;
+}
+
+@keyframes forceHide {
+    to { visibility: hidden; opacity: 0; }
 }

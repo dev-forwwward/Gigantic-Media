@@ -8,25 +8,27 @@ if (document.readyState === 'complete') {
     window.addEventListener('load', init); // wait for it
 }
 
+window.addEventListener('load', runPreloader, { once: true });
+
+function runPreloader() {
+    const preloader = document.querySelector('.preloader');
+    if (!preloader) return;
+
+    // Kill any competing tweens on this element first
+    gsap.killTweensOf(preloader);
+
+    gsap.set(preloader, { visibility: 'visible', opacity: 1 });
+
+    gsap.to(preloader, {
+        opacity: 0,
+        duration: 0.5,
+        delay: 0.5,
+        ease: 'power2.out',
+        onComplete: () => gsap.set(preloader, { visibility: 'hidden' })
+    });
+}
 
 var circleElements, textElements, dotElements;
-
-window.addEventListener('pageshow', function (event) {
-    // check if page was restored from cache
-    if (event.persisted) {
-        // page was restored from bfcache - ensure preloader is hidden
-        gsap.set('.preloader', { opacity: 0, display: 'none' });
-    } else {
-        // normal page load - fade-out preloader...
-        if (document.querySelector('.preloader')) {
-            gsap.set('.preloader', { visibility: 'visible' });
-            gsap.to('.preloader', {
-                opacity: 1,
-                duration: .1,
-            });
-        }
-    }
-});
 
 // Default Inits
 document.addEventListener("DOMContentLoaded", function () {
@@ -42,12 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //     window.addEventListener('load', forceScrollToTop);
     // window.addEventListener('pageshow', forceScrollToTop);
 
-    window.addEventListener('beforeunload', function () {
-        gsap.set('.preloader', {
-            visibility: 'hidden'
-        });
-    });
-
     // force scroll to top
     function forceScrollToTop() {
         const shouldKeepLenisRunning = sessionStorage.getItem("pageLoadedBefore") !== null;
@@ -57,22 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.body.classList.remove('overflow-hidden');
         }
 
-        if (document.querySelector('.preloader')) {
-            gsap.set('.preloader', { visibility: 'visible' });
-            gsap.to('.preloader', {
-                opacity: 1,
-                duration: .1,
-                onComplete: () => {
-                    lenis.scrollTo(0, { immediate: true });
-
-                    // Only start Lenis if user has been here before
-                    if (shouldKeepLenisRunning) {
-                        window.lenis.start();
-                        document.body.classList.remove('overflow-hidden');
-                    }
-                }
-            });
-        }
+        lenis.scrollTo(0, { immediate: true });
 
         if (window.ScrollTrigger) {
             ScrollTrigger.refresh();
@@ -99,19 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('pageshow', forceScrollToTop); // For back/forward navigation
 
     //---------------------------------------
-
-    // PRELOADER
-    setTimeout(() => {
-        gsap.to('.preloader', {
-            opacity: 0,
-            duration: .5,
-            ease: "power2.out",
-            onComplete: () => {
-                gsap.set('.preloader', { visibility: 'hidden' });
-            }
-        });
-    }, 500);
-
 
     // OPTIMIZED CIRCLE ROTATION - explicit transform-origin at init
     gsap.set('.circle-section', {
@@ -692,7 +660,13 @@ function init() {
         let boxes = document.querySelectorAll('.line_box_container');
 
         // let amountToRotate = 85;
+
+        // old amount, on account of 6 boxes total
         const amountToRotate = 192;
+
+        // NEW amount, on account of 6 boxes total (approximate value)
+        // const amountToRotate = 275;
+
 
         // store last positions outside onUpdate
         let lastPositions = new Map();
