@@ -645,7 +645,9 @@ function init() {
                 bottom: '0vw',
                 left: 'auto',
                 right: 'auto',
-                rotate: '-45deg',
+                // rotate: '-45deg',
+                rotate: '+=18deg',
+
                 // width: '55vw',
                 // height: '55vw',
                 immediateRender: false,
