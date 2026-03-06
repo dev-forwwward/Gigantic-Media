@@ -2,11 +2,32 @@
 
 let mobileBreakpoint = 991;
 
+if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    console.error('GSAP or ScrollTrigger not loaded');
+    returns
+}
+
+if (window.innerWidth <= mobileBreakpoint) {
+    console.log("running latest main mobile script - march 6th 2026");
+    ScrollTrigger.normalizeScroll({
+        allowNestedScroll: true,
+        type: "touch",       // limit to touch only on mobile
+        fastScrollEnd: true,
+    });
+}
+
 if (document.readyState === 'complete') {
     init(); // page is already fully loaded
 } else {
     window.addEventListener('load', init); // wait for it
 }
+
+// ScrollTrigger.normalizeScroll({
+//     allowNestedScroll: true,
+//     type: "touch,wheel,pointer",
+//     fastScrollEnd: true,  // Helps with momentum scrolling on mobile
+//     autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+// });
 
 function init() {
     if (window.innerWidth <= mobileBreakpoint && document.querySelector('.circle-section')) {
@@ -188,7 +209,7 @@ function init() {
                         body.classList.add('dark');
                         body.classList.add('dark-nav');
                         classSwitched = true;
-                    } else if(self.progress <=.48 && classSwitched) {
+                    } else if (self.progress <= .48 && classSwitched) {
                         body.classList.remove('dark');
                         body.classList.remove('dark-nav');
                         classSwitched = false;
@@ -197,7 +218,7 @@ function init() {
                     if (self.progress > .425 && !logoClassSwitched) {
                         body.classList.add('nav-logo-light');
                         logoClassSwitched = true;
-                    } else if(self.progress <= .425 && logoClassSwitched) {
+                    } else if (self.progress <= .425 && logoClassSwitched) {
                         body.classList.remove('nav-logo-light');
                         logoClassSwitched = false;
                     }
@@ -342,6 +363,89 @@ function init() {
 
         const circleElements = gsap.utils.toArray('.circle-list-el-content');
         const textElements = gsap.utils.toArray('.slice-line-divider-id .text-weight-medium');
+        const dotElements = textElements.map(text => text.previousSibling).filter(Boolean);
+
+        // Initialize will-change for GPU acceleration (one-time cost)
+        dotElements.forEach(dot => {
+            if (dot) {
+                dot.style.willChange = 'transform, filter';
+            }
+        });
+
+        // Use GSAP's ticker for optimal performance
+        let latestProgress = 0;
+        let needsUpdate = false;
+
+        function updateElements() {
+            if (!needsUpdate) return;
+
+            const progress = latestProgress;
+            const totalElements = circleElements.length;
+
+            // Batch all reads first, then batch all writes
+            const updates = circleElements.map((_circle, index) => {
+                const elementProgress = (progress * totalElements) - index;
+
+                const fadeInStart = -0.3;
+                const fadeInEnd = 0.35;
+                const fadeOutStart = 1.5;
+                const fadeOutEnd = 2.2;
+
+                let opacity, dotSize, dotLeft, dotBlur;
+
+                if (elementProgress <= fadeInStart) {
+                    opacity = 0;
+                    dotSize = 4;
+                    dotLeft = 2;
+                    dotBlur = 2;
+                } else if (elementProgress <= fadeInEnd) {
+                    const fadeInProgress = (elementProgress - fadeInStart) / (fadeInEnd - fadeInStart);
+                    opacity = fadeInProgress;
+                    dotSize = 4 + (fadeInProgress * 6);
+                    dotLeft = 2 + (fadeInProgress * 3);
+                    dotBlur = 2 + (fadeInProgress * 2);
+                } else if (elementProgress <= fadeOutStart) {
+                    opacity = 1;
+                    dotSize = 10;
+                    dotLeft = 5;
+                    dotBlur = 4;
+                } else if (elementProgress <= fadeOutEnd) {
+                    const fadeOutProgress = (elementProgress - fadeOutStart) / (fadeOutEnd - fadeOutStart);
+                    opacity = 1 - fadeOutProgress;
+                    dotSize = 10 - (fadeOutProgress * 6);
+                    dotLeft = 5 - (fadeOutProgress * 3);
+                    dotBlur = 4 - (fadeOutProgress * 2);
+                } else {
+                    opacity = 0;
+                    dotSize = 4;
+                    dotLeft = 2;
+                    dotBlur = 2;
+                }
+
+                return { index, opacity, dotSize, dotLeft, dotBlur };
+            });
+
+            // Apply all updates in one batch
+            updates.forEach(({ index, opacity, dotSize, dotLeft, dotBlur }) => {
+                const circle = circleElements[index];
+                const text = textElements[index];
+                const dot = dotElements[index];
+
+                if (!dot) return;
+
+                circle.style.opacity = opacity;
+                text.style.opacity = opacity;
+                dot.style.width = dotSize + 'px';
+                dot.style.height = dotSize + 'px';
+                dot.style.transform = `translateX(${-dotLeft}px)`;
+                dot.style.filter = `blur(${dotBlur}px)`;
+            });
+
+            needsUpdate = false;
+        }
+
+        // Add to GSAP's ticker for optimal timing
+        gsap.ticker.add(updateElements);
 
         gsap.timeline({
             scrollTrigger: {
@@ -353,69 +457,14 @@ function init() {
                 anticipatePin: .5,
                 pin: true,
                 onUpdate: self => {
-                    const progress = self.progress;
-                    const totalElements = circleElements.length;
-
-                    circleElements.forEach((circle, index) => {
-                        const correspondingText = textElements[index];
-                        const correspondingDot = textElements[index].previousSibling;
-
-                        const elementProgress = (progress * totalElements) - index;
-
-                        let opacity;
-                        let dotSize;
-                        let dotLeft;
-                        let dotBlur;
-
-                        // Timing that keeps text visible longer, matching the 8th element's behavior
-                        const fadeInStart = -0.3;     // Start fading in from bottom
-                        const fadeInEnd = 0.35;       // Finish fading in before center
-                        const fadeOutStart = 1.5;     // Start fading out much later (well past center)
-                        const fadeOutEnd = 2.2;       // Finish fading out near top edge
-
-                        if (elementProgress <= fadeInStart) {
-                            // Not visible yet
-                            opacity = 0;
-                            dotSize = 4;
-                            dotLeft = 2;
-                            dotBlur = 2;
-                        } else if (elementProgress <= fadeInEnd) {
-                            // Fade in phase
-                            const fadeInProgress = (elementProgress - fadeInStart) / (fadeInEnd - fadeInStart);
-                            opacity = fadeInProgress;
-                            dotSize = 4 + (fadeInProgress * 6);
-                            dotLeft = 2 + (fadeInProgress * 3);
-                            dotBlur = 2 + (fadeInProgress * 2);
-                        } else if (elementProgress <= fadeOutStart) {
-                            // Full opacity at center (very brief period)
-                            opacity = 1;
-                            dotSize = 10;
-                            dotLeft = 5;
-                            dotBlur = 4;
-                        } else if (elementProgress <= fadeOutEnd) {
-                            // Fade out phase
-                            const fadeOutProgress = (elementProgress - fadeOutStart) / (fadeOutEnd - fadeOutStart);
-                            opacity = 1 - fadeOutProgress;
-                            dotSize = 10 - (fadeOutProgress * 6);
-                            dotLeft = 5 - (fadeOutProgress * 3);
-                            dotBlur = 4 - (fadeOutProgress * 2);
-                        } else {
-                            // Completely faded out
-                            opacity = 0;
-                            dotSize = 4;
-                            dotLeft = 2;
-                            dotBlur = 2;
-                        }
-
-                        gsap.set([circle, correspondingText], { opacity });
-
-                        gsap.set(correspondingDot, {
-                            width: dotSize,
-                            height: dotSize,
-                            left: -dotLeft,
-                            filter: `blur(${dotBlur}px)`,
-                        });
-                    });
+                    latestProgress = self.progress;
+                    needsUpdate = true;
+                },
+                onLeave: () => {
+                    gsap.ticker.remove(updateElements);
+                },
+                onEnterBack: () => {
+                    gsap.ticker.add(updateElements);
                 }
             }
         })
@@ -501,7 +550,7 @@ function init() {
                 duration: 0,
             }, "<")
             .to('.circle-list-container', {
-                opacity: 0,
+                // opacity: 0,
                 duration: .8,
                 onStart: () => {
                     circleSection.classList.add('hide-pseudo-el');
@@ -529,14 +578,16 @@ function init() {
         }
 
         // debounced screen resizing handler
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                setSliceLineWidth();
-                ScrollTrigger.refresh();
-            }, 250);
-        });
+        // let resizeTimeout;
+        // window.addEventListener('resize', () => {
+        //     clearTimeout(resizeTimeout);
+        //     resizeTimeout = setTimeout(() => {
+        //         setSliceLineWidth();
+        //         ScrollTrigger.refresh();
+        //     }, 250);
+        // });
+        // ScrollTrigger resize handler
+        ScrollTrigger.addEventListener('refreshInit', setSliceLineWidth);
 
 
         // center circle element on scroll to Contact section
@@ -631,6 +682,6 @@ function init() {
                 duration: 1,
             }, "<");
 
-        ScrollTrigger.refresh();
+        // ScrollTrigger.refresh();
     }
 }

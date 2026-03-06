@@ -1,5 +1,7 @@
 gsap.registerPlugin(ScrollTrigger);
 
+console.log("running latest main script - march 6th 2026");
+
 let desktopBreakpoint = 992;
 
 if (document.readyState === 'complete') {
@@ -808,9 +810,12 @@ function init() {
             });
         }
 
-        window.addEventListener('resize', () => {
-            setSliceLineWidth();
-        });
+        // window.addEventListener('resize', () => {
+        //     setSliceLineWidth();
+        // });
+
+        // ScrollTrigger resize handler
+        ScrollTrigger.addEventListener('refreshInit', setSliceLineWidth);
 
 
         const borderContainer = document.querySelector('.page_border_container');
