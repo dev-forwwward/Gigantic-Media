@@ -8,7 +8,6 @@ if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
 }
 
 if (window.innerWidth <= mobileBreakpoint) {
-    console.log("running latest main mobile script - march 6th 2026");
     ScrollTrigger.normalizeScroll({
         allowNestedScroll: true,
         type: "touch",       // limit to touch only on mobile
@@ -550,7 +549,7 @@ function init() {
                 duration: 0,
             }, "<")
             .to('.circle-list-container', {
-                // opacity: 0,
+                opacity: 0,
                 duration: .8,
                 onStart: () => {
                     circleSection.classList.add('hide-pseudo-el');
