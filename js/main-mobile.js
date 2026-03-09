@@ -1,5 +1,5 @@
 // NOTE: this script pertains only to the mobile version of the HOMEPAGE
-
+console.log("running latest version - march 6 2026");
 let mobileBreakpoint = 991;
 
 if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
