@@ -144,18 +144,18 @@ document.addEventListener("DOMContentLoaded", function () {
                         ScrollTrigger.refresh();
                     }
                 })
-                    .from('.navbar_component', {
-                        yPercent: -100,
-                        duration: .5,
-                        ease: 'power2.out'
-                    }, "-=.2")
-                    .from('h1, .hero_section p, .hero_section a', {
-                        yPercent: 100,
-                        opacity: 0,
-                        duration: .8,
-                        stagger: .25,
-                        ease: 'power2.out'
-                    }, "<");
+                    // .from('.navbar_component', {
+                    //     yPercent: -100,
+                    //     duration: .5,
+                    //     ease: 'power2.out'
+                    // }, "-=.2")
+                    // .from('h1, .hero_section p, .hero_section a', {
+                    //     yPercent: 100,
+                    //     opacity: 0,
+                    //     duration: .8,
+                    //     stagger: .25,
+                    //     ease: 'power2.out'
+                    // }, "<");
 
             });
         } else {
