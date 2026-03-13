@@ -1,19 +1,17 @@
 // NOTE: this script pertains only to the mobile version of the HOMEPAGE
-console.log("running latest version - march 6 2026");
+console.log("running latest version - march 10 2026");
 let mobileBreakpoint = 991;
 
 if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
     console.error('GSAP or ScrollTrigger not loaded');
-    returns
+    returns;
 }
 
-if (window.innerWidth <= mobileBreakpoint) {
-    ScrollTrigger.normalizeScroll({
-        allowNestedScroll: true,
-        type: "touch",       // limit to touch only on mobile
-        fastScrollEnd: true,
-    });
-}
+// NOTE: normalizeScroll is disabled — Lenis (init'd in main.js) handles scroll normalization.
+// Using both together causes conflicts on iOS/WebKit.
+
+// Prevent ScrollTrigger from refreshing on every iOS address bar resize
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 if (document.readyState === 'complete') {
     init(); // page is already fully loaded
@@ -136,7 +134,7 @@ function init() {
                 yPercent: 0,
                 scale: 1
             }, {
-                scale: 1.05,
+                //scale: 1.05,
                 yPercent: -10,
                 duration: 1,
             }, "<")
@@ -364,12 +362,8 @@ function init() {
         const textElements = gsap.utils.toArray('.slice-line-divider-id .text-weight-medium');
         const dotElements = textElements.map(text => text.previousSibling).filter(Boolean);
 
-        // Initialize will-change for GPU acceleration (one-time cost)
-        dotElements.forEach(dot => {
-            if (dot) {
-                dot.style.willChange = 'transform, filter';
-            }
-        });
+        // NOTE: will-change removed — iOS Safari has a limited GPU memory budget and
+        // setting will-change on many elements simultaneously causes rendering issues.
 
         // Use GSAP's ticker for optimal performance
         let latestProgress = 0;
